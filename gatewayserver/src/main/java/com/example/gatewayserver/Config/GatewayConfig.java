@@ -42,6 +42,9 @@ public class GatewayConfig {
                         .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
                         .uri("lb://poll-server"))
 
+                .route("comment-server", r -> r.path("/comments/**")
+                        .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
+                        .uri("lb://comment-server"))
 
                 .build();
     }

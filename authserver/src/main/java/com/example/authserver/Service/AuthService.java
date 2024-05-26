@@ -25,4 +25,6 @@ public interface AuthService {
     AuthResponseDto findById(Long id);
 
     void plusPopularPoint(Long id);
+
+    AuthResponseDto findByUid(String uid);
 }

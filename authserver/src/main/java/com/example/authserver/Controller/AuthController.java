@@ -81,6 +81,11 @@ public class AuthController {
         logger.info("Auth Feign 호출");
         return authService.findById(id);
     }
+    @GetMapping("/{uid}")
+    public AuthResponseDto findByUid(@PathVariable("uid") String uid) {
+        logger.info("Auth Feign 호출");
+        return authService.findByUid(uid);
+    }
     @PatchMapping("/plus/point")
     void plusPopularPoint(Long id){
         authService.plusPopularPoint(id);

@@ -1,5 +1,6 @@
 package com.example.pollserver.Controller;
 
+import com.example.pollserver.Dto.Feign.PollReponseDto;
 import com.example.pollserver.Dto.Poll.ClosePollRequest;
 import com.example.pollserver.Dto.Poll.PollDto;
 import com.example.pollserver.Dto.Poll.PollRequest;
@@ -202,5 +203,9 @@ public class PollController {
 
         //파일 이름과 URL을 리턴
         return fileName + "," + fileUrl;
+    }
+    @GetMapping("/find/{id}")
+    public PollReponseDto findById(@PathVariable Long id) {
+        return pollService.findById(id);
     }
 }

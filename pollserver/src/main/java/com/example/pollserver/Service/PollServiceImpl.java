@@ -1,6 +1,7 @@
 package com.example.pollserver.Service;
 
 import com.example.pollserver.Dto.Feign.AuthResponseDto;
+import com.example.pollserver.Dto.Feign.PollReponseDto;
 import com.example.pollserver.Dto.Poll.ClosePollRequest;
 import com.example.pollserver.Dto.Poll.PollDto;
 import com.example.pollserver.Dto.Poll.PollRequest;
@@ -224,6 +225,13 @@ public class PollServiceImpl implements PollService{
                 .collect(Collectors.toList());
 
         updatePopularPoints(votesForMostVotedChoice);
+    }
+
+    @Override // Feign
+    public PollReponseDto findById(Long id) {
+        Poll poll = pollRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("투표를 찾을 수 없습니다."));
+        return new PollReponseDto(poll.getId());
     }
 
     private void updatePopularPoints(List<Vote> votes) {

@@ -150,4 +150,12 @@ public class AuthServiceImpl implements AuthService{
         userEntity.setPopular_point(userEntity.getPopular_point() + 10);
         authRepository.save(userEntity);
     }
+
+    @Override
+    public AuthResponseDto findByUid(String uid) {
+        AuthEntity userEntity = authRepository.findByUid(uid);
+        if(userEntity == null)
+            throw new IllegalArgumentException("해당 유저가 존재하지 않습니다.");
+        return AuthResponseDto.entityToDto(userEntity);
+    }
 }
