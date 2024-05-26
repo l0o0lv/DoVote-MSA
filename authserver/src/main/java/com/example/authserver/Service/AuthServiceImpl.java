@@ -5,6 +5,7 @@ import com.example.authserver.Dto.AuthDto;
 import com.example.authserver.Dto.AuthResponseDto;
 import com.example.authserver.Dto.TokenDto;
 import com.example.authserver.Entity.AuthEntity;
+import com.example.authserver.Enum.Category;
 import com.example.authserver.Repository.AuthRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.example.authserver.Dto.AuthResponseDto.entityToDto;
+import java.util.List;
 
 @Service
 public class AuthServiceImpl implements AuthService{
@@ -68,6 +69,10 @@ public class AuthServiceImpl implements AuthService{
         tokenDto.setRoles((authEntity.getRole().toString())); // userdto에서 받아와야 하는데 널값이 떠 entity로 변경
         tokenDto.setToken(jwtTokenProvider.createToken(authEntity.getNickname(),authEntity.getRole()));
         logger.info("로그인 성공!");
+
+        authEntity.setFirebaseToken(authDto.getFirebaseToken()); //FireBaseToekn 저장
+        authRepository.save(authEntity);
+
         return tokenDto;
     }
 
@@ -157,5 +162,11 @@ public class AuthServiceImpl implements AuthService{
         if(userEntity == null)
             throw new IllegalArgumentException("해당 유저가 존재하지 않습니다.");
         return AuthResponseDto.entityToDto(userEntity);
+    }
+
+    @Override
+    public List<AuthResponseDto> getUsersByCategory(Category category){
+        List<AuthEntity> users = authRepository.findByInterestsContaining(category);
+        return AuthResponseDto.entityToDto(users);
     }
 }

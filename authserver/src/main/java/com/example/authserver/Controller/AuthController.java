@@ -1,6 +1,7 @@
 package com.example.authserver.Controller;
 
 import com.example.authserver.Dto.AuthResponseDto;
+import com.example.authserver.Enum.Category;
 import com.example.authserver.Service.AuthService;
 import com.example.authserver.Dto.AuthDto;
 import com.example.authserver.Dto.TokenDto;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin("*")
 @RestController
@@ -69,6 +72,9 @@ public class AuthController {
         }
     }
 
+
+    //이 뒤로 다 Feign Client
+
     //Message Server에서 사용하는 Feign Client
     @GetMapping("/id/{nickname}")
     public AuthResponseDto findIdByNickname(@PathVariable("nickname") String nickname) {
@@ -90,4 +96,9 @@ public class AuthController {
     void plusPopularPoint(Long id){
         authService.plusPopularPoint(id);
     }
+    @GetMapping("/fcm/{category}")
+    public List<AuthResponseDto> getUsersByCategory(@PathVariable Category category){
+        return authService.getUsersByCategory(category);
+    }
+
 }

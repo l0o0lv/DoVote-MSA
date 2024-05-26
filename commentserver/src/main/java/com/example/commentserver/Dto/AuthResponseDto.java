@@ -11,4 +11,5 @@ public class AuthResponseDto {
     private Long popular_point;
     private String gender;
     private String age;
+    private String firebaseToken;
 }

@@ -3,7 +3,10 @@ package com.example.authserver.Service;
 import com.example.authserver.Dto.AuthDto;
 import com.example.authserver.Dto.AuthResponseDto;
 import com.example.authserver.Dto.TokenDto;
+import com.example.authserver.Enum.Category;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface AuthService {
@@ -27,4 +30,6 @@ public interface AuthService {
     void plusPopularPoint(Long id);
 
     AuthResponseDto findByUid(String uid);
+
+    List<AuthResponseDto> getUsersByCategory(Category category);
 }
