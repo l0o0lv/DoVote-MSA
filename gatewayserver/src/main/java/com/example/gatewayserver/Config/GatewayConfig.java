@@ -34,12 +34,23 @@ public class GatewayConfig {
                 .route("poll-server", r -> r.path("/polls/close")
                         .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
                         .uri("lb://poll-server"))
+                .route("poll-server", r -> r.path("/polls/{id}")
+                        .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
+                        .uri("lb://poll-server"))
                 .route("poll-server", r -> r.path("/polls/**")
                         .uri("lb://poll-server"))
+
                 .route("poll-server", r -> r.path("/choices/**")
                         .uri("lb://poll-server"))
+
                 .route("poll-server", r -> r.path("/votes/ok/{nickname}")
                         .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
+                        .uri("lb://poll-server"))
+                .route("poll-server", r -> r.path("/votes")
+                        .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
+                        .uri("lb://poll-server"))
+
+                .route("poll-server", r -> r.path("/votes/**")
                         .uri("lb://poll-server"))
 
                 .route("comment-server", r -> r.path("/comments/**")

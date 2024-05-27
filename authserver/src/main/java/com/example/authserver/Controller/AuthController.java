@@ -92,8 +92,8 @@ public class AuthController {
         logger.info("Auth Feign 호출");
         return authService.findByUid(uid);
     }
-    @PatchMapping("/plus/point")
-    void plusPopularPoint(Long id){
+    @PostMapping("/plus/point/{id}")
+    void plusPopularPoint(@PathVariable Long id){
         authService.plusPopularPoint(id);
     }
     @GetMapping("/fcm/{category}")

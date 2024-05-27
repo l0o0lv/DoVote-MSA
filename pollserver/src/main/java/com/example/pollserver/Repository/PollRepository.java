@@ -13,7 +13,7 @@ public interface PollRepository extends JpaRepository<Poll, Long> {
     List<Poll> findByTitleContaining(String title);
     List<Poll> findByCategory(Category category);
     // 현재 유저가 생성한 투표의 수를 세는 메서드
-    long countByCreatedBy(String createdBy);
+    long countByUserId(Long userId);
     List<Poll> findAllByCreatedBy(String createdBy);
 }
 

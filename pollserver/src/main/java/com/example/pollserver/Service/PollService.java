@@ -1,6 +1,6 @@
 package com.example.pollserver.Service;
 
-import com.example.pollserver.Dto.Feign.PollReponseDto;
+import com.example.pollserver.Dto.Feign.PollResponseDto;
 import com.example.pollserver.Dto.Poll.ClosePollRequest;
 import com.example.pollserver.Dto.Poll.PollDto;
 import com.example.pollserver.Dto.Poll.PollRequest;
@@ -39,7 +39,7 @@ public interface PollService {
 
     void awardPopularPoints(ClosePollRequest closePollRequest);
 
-    PollReponseDto findById(Long id);
+    PollResponseDto findById(Long userId);
 
     //회원 닉네임 수정 시 Poll db createdBy 필드 수정
 //    void updatePollCreatedBy(UserDto userDto);

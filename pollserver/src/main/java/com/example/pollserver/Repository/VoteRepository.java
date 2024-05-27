@@ -15,7 +15,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
     List<Vote> findByNickname(String nickname);
 
-    Long countByNickname(String nickname);
+    Long countByUserId(Long userId);
 
     List<Vote> findByPoll(Poll poll);
     List<Vote> findByUserId(Long userId);

@@ -89,6 +89,8 @@ public class CommentServicempl implements CommentService{
 
         Comment comment = commentDto.dtotoEntity();
         comment.setMediaUrl(mediaUrl);
+        comment.setUserId(authResponseDto.getId());
+        comment.setPollId(pollResponseDto.getId());
         Comment savedComment = commentRepository.save(comment);
         log.info("댓글이 성공적으로 작성되었습니다!");
 
@@ -142,6 +144,10 @@ public class CommentServicempl implements CommentService{
         }
         Comment comment = commentDto.dtotoEntity();
         comment.setParentComment(parentComment);
+        comment.setUserId(authResponseDto.getId());
+        comment.setPollId(pollResponseDto.getId());
+        parentComment.setUserId(authResponseDto.getId());
+        parentComment.setPollId(pollResponseDto.getId());
         comment.setMediaUrl(mediaUrl);
 
         if (!parentComment.getPollId().equals(pollResponseDto.getId())) {

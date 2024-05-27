@@ -1,6 +1,6 @@
 package com.example.pollserver.Controller;
 
-import com.example.pollserver.Dto.Feign.PollReponseDto;
+import com.example.pollserver.Dto.Feign.PollResponseDto;
 import com.example.pollserver.Dto.Poll.ClosePollRequest;
 import com.example.pollserver.Dto.Poll.PollDto;
 import com.example.pollserver.Dto.Poll.PollRequest;
@@ -21,11 +21,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import com.google.cloud.storage.Storage;
 import org.springframework.http.MediaType;
 
+@CrossOrigin("*")
 @Slf4j
 @RestController
 @RequestMapping("/polls")
@@ -175,7 +177,7 @@ public class PollController {
         String safeFileName = UUID.randomUUID().toString();
 
         //파일 확장자
-        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        String extension = Objects.requireNonNull(originalFileName).substring(originalFileName.lastIndexOf("."));
 
         //파일명
         String fileName = safeFileName + extension;
@@ -205,7 +207,7 @@ public class PollController {
         return fileName + "," + fileUrl;
     }
     @GetMapping("/find/{id}")
-    public PollReponseDto findById(@PathVariable Long id) {
+    public PollResponseDto findById(@PathVariable Long id) {
         return pollService.findById(id);
     }
 }

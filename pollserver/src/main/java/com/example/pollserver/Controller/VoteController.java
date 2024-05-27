@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/votes")
 public class VoteController {
@@ -25,17 +26,12 @@ public class VoteController {
 
     @PostMapping //TODO : JWT 필터 필요
     public ResponseEntity<String> vote(@Valid @RequestBody VoteDto voteDto) {
-        try {
             if (voteDto.getNickname() != null) {
-
                 voteService.vote(voteDto);
                 return ResponseEntity.status(HttpStatus.CREATED).body("투표가 성공적으로 등록되었습니다.");
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자 인증에 실패하였습니다.");
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("투표 등록에 실패하였습니다.");
-        }
     }
 
     //투표 완료한사람 정보 리턴

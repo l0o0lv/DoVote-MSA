@@ -1,7 +1,7 @@
 package com.example.pollserver.Service;
 
 import com.example.pollserver.Dto.Feign.AuthResponseDto;
-import com.example.pollserver.Dto.Feign.PollReponseDto;
+import com.example.pollserver.Dto.Feign.PollResponseDto;
 import com.example.pollserver.Dto.Poll.ClosePollRequest;
 import com.example.pollserver.Dto.Poll.PollDto;
 import com.example.pollserver.Dto.Poll.PollRequest;
@@ -97,7 +97,7 @@ public class PollServiceImpl implements PollService{
              Category category) {
         log.info("createPollWithChoices 실행");
 
-        AuthResponseDto findId = authFeignClient.findByNickname(pollRequest.getCreatedBy());
+        AuthResponseDto findId = authFeignClient.findById(pollRequest.getUserId());
 
         PollDto pollDto = new PollDto();
 
@@ -169,14 +169,16 @@ public class PollServiceImpl implements PollService{
     //현재 로그인한 유저의 생성한 투표수 반환
     public long getCreatedPollCount(String nickname) {
         logger.info("생성한 투표수를 반환 합니다. ");
-        return pollRepository.countByCreatedBy(nickname);
+        AuthResponseDto authResponseDto = authFeignClient.findByNickname(nickname);
+        return pollRepository.countByUserId(authResponseDto.getId());
     }
 
 
     //현재 로그인한 유저의 참가한 투표수 반환
     public long getParticipatedPollCount(String nickname) {
         logger.info("참여한 투표수를 반환 합니다. ");
-        return voteRepository.countByNickname(nickname);
+        AuthResponseDto authResponseDto = authFeignClient.findByNickname(nickname);
+        return voteRepository.countByUserId(authResponseDto.getId());
     }
 
     //대중성 포인트 리턴
@@ -186,10 +188,12 @@ public class PollServiceImpl implements PollService{
     }
 
     public void closePoll(ClosePollRequest closePollRequest) {
-        logger.info("유저 인증에 성공하였습니다. ");
-
         Poll poll = pollRepository.findById(closePollRequest.getPollId())
                 .orElseThrow(() -> new IllegalArgumentException("투표를 찾을 수 없습니다."));
+
+        AuthResponseDto authResponseDto = authFeignClient.findByNickname(closePollRequest.getNickname());
+        if(!poll.getUserId().equals(authResponseDto.getId()))
+            throw new IllegalArgumentException("투표를 생성한 회원만 종료할 수 있습니다..");
 
         if (poll.getVoteStatus() == VoteStatus.CLOSED) {
             throw new IllegalArgumentException("이미 종료된 투표입니다.");
@@ -215,10 +219,12 @@ public class PollServiceImpl implements PollService{
             Long choiceId = vote.getChoice().getId();
             choiceVotes.put(choiceId, choiceVotes.getOrDefault(choiceId, 0L) + 1);
         }
+        logger.info(choiceVotes.toString());
 
         // 가장 많이 투표받은 선택지 찾기
         Long mostVotedChoiceId = Collections.max(choiceVotes.entrySet(), Map.Entry.comparingByValue()).getKey();
 
+        logger.info(String.valueOf(mostVotedChoiceId));
         // 해당 선택지를 투표한 유저들에게 popular_point 10씩 더하기
         List<Vote> votesForMostVotedChoice = votes.stream()
                 .filter(vote -> vote.getChoice().getId().equals(mostVotedChoiceId))
@@ -228,15 +234,16 @@ public class PollServiceImpl implements PollService{
     }
 
     @Override // Feign
-    public PollReponseDto findById(Long id) {
+    public PollResponseDto findById(Long id) {
         Poll poll = pollRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("투표를 찾을 수 없습니다."));
-        return new PollReponseDto(poll.getId());
+        return new PollResponseDto(poll.getId());
     }
 
     private void updatePopularPoints(List<Vote> votes) {
         for (Vote vote : votes) {
             Long winUserId = vote.getUserId();
+            logger.info(String.valueOf(winUserId));
             authFeignClient.plusPopularPoint(winUserId);
             //user.setPopular_point(user.getPopular_point() + 10);
         }
