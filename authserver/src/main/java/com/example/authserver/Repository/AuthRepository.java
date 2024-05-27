@@ -20,6 +20,5 @@ public interface AuthRepository extends JpaRepository<AuthEntity, Long> {
     AuthEntity findByNickname(String nickname);
 
     AuthEntity findByUid(String uid);
-
-
+    AuthEntity findByPhoneNum(String phoneNum);
 }

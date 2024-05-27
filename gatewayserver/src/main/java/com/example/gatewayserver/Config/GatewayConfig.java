@@ -46,6 +46,8 @@ public class GatewayConfig {
                         .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
                         .uri("lb://comment-server"))
 
+                .route("fcm-server", r -> r.path("/fcm/**")
+                        .uri("lb://fcm-server"))
                 .build();
     }
 }

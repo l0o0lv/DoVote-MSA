@@ -32,4 +32,6 @@ public interface AuthService {
     AuthResponseDto findByUid(String uid);
 
     List<AuthResponseDto> getUsersByCategory(Category category);
+
+    AuthResponseDto checkPhoneNum(String phoneNum);
 }

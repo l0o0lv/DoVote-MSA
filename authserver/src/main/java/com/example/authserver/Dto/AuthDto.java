@@ -35,7 +35,7 @@ public class AuthDto {
     private String role;
     private String firebaseToken;
 
-    private Set<Category> interetes;
+    private Set<Category> interests;
 
 
 }

@@ -100,5 +100,9 @@ public class AuthController {
     public List<AuthResponseDto> getUsersByCategory(@PathVariable Category category){
         return authService.getUsersByCategory(category);
     }
+    @GetMapping("/check/phoneNum")
+    public AuthResponseDto checkPhoneNum(@RequestParam String phoneNum){
+        return authService.checkPhoneNum(phoneNum);
+    }
 
 }

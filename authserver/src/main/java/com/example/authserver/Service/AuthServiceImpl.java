@@ -134,6 +134,7 @@ public class AuthServiceImpl implements AuthService{
         return userEntity.getMbti();
     }
 
+    // 이 밑으로 Feign
     @Override
     public AuthResponseDto findByNickname(String nickname) {
         AuthEntity userEntity = authRepository.findByNickname(nickname);
@@ -168,5 +169,13 @@ public class AuthServiceImpl implements AuthService{
     public List<AuthResponseDto> getUsersByCategory(Category category){
         List<AuthEntity> users = authRepository.findByInterestsContaining(category);
         return AuthResponseDto.entityToDto(users);
+    }
+
+    @Override
+    public AuthResponseDto checkPhoneNum(String phoneNum) {
+        AuthEntity authEntity = authRepository.findByPhoneNum(phoneNum);
+        if(authEntity == null)
+            throw new IllegalArgumentException("해당 유저가 존재하지 않습니다.");
+        return AuthResponseDto.entityToDto(authEntity);
     }
 }

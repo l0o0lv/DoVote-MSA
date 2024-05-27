@@ -60,7 +60,7 @@ public class AuthEntity {
                 .popular_point(authDto.getPopular_point())
                 .firebaseToken(authDto.getFirebaseToken())
                 .role(Collections.singletonList(authDto.getRole()))
-                .interests(authDto.getInteretes())
+                .interests(authDto.getInterests())
                 .build();
     }
 
@@ -77,7 +77,7 @@ public class AuthEntity {
                 .popular_point(authEntity.getPopular_point())
                 .firebaseToken(authEntity.getFirebaseToken())
                 .role(authEntity.getRole().toString())
-                .interetes(authEntity.getInterests())
+                .interests(authEntity.getInterests())
                 .build();
     }
 }
