@@ -174,6 +174,12 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public AuthResponseDto checkPhoneNum(String phoneNum) {
         AuthEntity authEntity = authRepository.findByPhoneNum(phoneNum);
+        if(authEntity == null) {
+            logger.info("가입되지 않은 번호입니다.");
+            return AuthResponseDto.builder()
+                    .nickname("가입되지 않은 번호")
+                    .build();
+        }
         return AuthResponseDto.entityToDto(authEntity);
     }
 }

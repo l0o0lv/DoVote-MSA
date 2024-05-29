@@ -32,7 +32,7 @@ public class SmsServiceImpl implements SmsService{
 
         AuthResponseDto authResponseDto = authFeignClient.checkPhoneNum(phoneNum);
 
-        if(authResponseDto != null){
+        if(!authResponseDto.getNickname().equals("가입되지 않은 번호")){
             throw new IllegalArgumentException("이미 가입된 번호입니다.");
         }
 
