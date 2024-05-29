@@ -174,8 +174,6 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public AuthResponseDto checkPhoneNum(String phoneNum) {
         AuthEntity authEntity = authRepository.findByPhoneNum(phoneNum);
-        if(authEntity == null)
-            throw new IllegalArgumentException("해당 유저가 존재하지 않습니다.");
         return AuthResponseDto.entityToDto(authEntity);
     }
 }
