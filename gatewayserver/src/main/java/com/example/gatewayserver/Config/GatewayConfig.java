@@ -28,6 +28,8 @@ public class GatewayConfig {
                         .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
                         .uri("lb://message-server"))
 
+                .route("poll-server", r -> r.path("/polls/**")
+                        .uri("lb://poll-server"))
                 .route("poll-server", r -> r.path("/polls/upload")
                         .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
                         .uri("lb://poll-server"))
@@ -37,12 +39,13 @@ public class GatewayConfig {
                 .route("poll-server", r -> r.path("/polls/{id}")
                         .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
                         .uri("lb://poll-server"))
-                .route("poll-server", r -> r.path("/polls/**")
-                        .uri("lb://poll-server"))
+
 
                 .route("poll-server", r -> r.path("/choices/**")
                         .uri("lb://poll-server"))
 
+                .route("poll-server", r -> r.path("/votes/**")
+                        .uri("lb://poll-server"))
                 .route("poll-server", r -> r.path("/votes/ok/{nickname}")
                         .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
                         .uri("lb://poll-server"))
@@ -50,8 +53,6 @@ public class GatewayConfig {
                         .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
                         .uri("lb://poll-server"))
 
-                .route("poll-server", r -> r.path("/votes/**")
-                        .uri("lb://poll-server"))
 
                 .route("comment-server", r -> r.path("/comments/**")
                         .filters(f->f.filter(filter.apply(config -> config.setRequiredRole("ROLE_USER"))))
