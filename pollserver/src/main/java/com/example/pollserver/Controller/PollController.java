@@ -27,7 +27,6 @@ import java.util.UUID;
 import com.google.cloud.storage.Storage;
 import org.springframework.http.MediaType;
 
-@CrossOrigin("*")
 @Slf4j
 @RestController
 @RequestMapping("/polls")
