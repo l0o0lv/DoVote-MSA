@@ -36,18 +36,18 @@ public class SecurityConfig {
 
         return httpSecurity.build();
     }
-    @Bean
-    public CorsConfigurationSource corsConfiguration(){
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://dodovote.netlify.app"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedOriginPattern("*");
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration("/**", configuration);
-
-        return source;
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfiguration(){
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(List.of("https://dodovote.netlify.app"));
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+//        configuration.addAllowedHeader("*");
+//        configuration.addAllowedOriginPattern("*");
+//        configuration.setAllowCredentials(true);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//
+//        source.registerCorsConfiguration("/**", configuration);
+//
+//        return source;
+//    }
 }
