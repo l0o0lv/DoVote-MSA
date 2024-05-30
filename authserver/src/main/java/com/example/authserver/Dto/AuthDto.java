@@ -34,6 +34,7 @@ public class AuthDto {
     private Long popular_point; //대중성 포인트
     private String role;
     private String firebaseToken;
+    private Long commentCount;
 
     private Set<Category> interests;
 

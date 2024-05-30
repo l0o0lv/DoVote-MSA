@@ -111,4 +111,9 @@ public class CommentController {
         commentService.delete(commentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/count/{userId}")
+    public Long countByUserId(@PathVariable Long userId) {
+        return commentService.countByUserId(userId);
+    }
 }

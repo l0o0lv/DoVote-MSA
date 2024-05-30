@@ -23,13 +23,16 @@ public class AuthServiceImpl implements AuthService{
     private final AuthRepository authRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final CommentFeignClient commentFeignClient;
 
     public AuthServiceImpl(@Autowired AuthRepository authRepository,
                            PasswordEncoder passwordEncoder,
-                           JwtTokenProvider jwtTokenProvider){
+                           JwtTokenProvider jwtTokenProvider,
+                           CommentFeignClient commentFeignClient){
         this.authRepository = authRepository;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
+        this.commentFeignClient = commentFeignClient;
     }
 
     public void CheckEmailDuplicate(String uid) {
@@ -81,7 +84,11 @@ public class AuthServiceImpl implements AuthService{
     public AuthDto ReadUserByUid(String uid) {
         AuthEntity target = authRepository.getByUid(uid)
                 .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다"));
-        return AuthEntity.entityToDto(target);
+
+        Long commentCount = commentFeignClient.countByUserId(target.getId());
+        AuthDto authDto = AuthEntity.entityToDto(target);
+        authDto.setCommentCount(commentCount);
+        return authDto;
     }
     @Override
     @Transactional

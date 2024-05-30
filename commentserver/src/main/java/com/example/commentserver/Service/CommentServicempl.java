@@ -345,6 +345,11 @@ public class CommentServicempl implements CommentService{
         }
     }
 
+    @Override
+    public Long countByUserId(Long userId) {
+        return commentRepository.countByUserId(userId);
+    }
+
     //대댓글 삭제 메서드
     private void deleteChildrenComments(Comment comment) {
         Queue<Comment> queue = new LinkedList<>();

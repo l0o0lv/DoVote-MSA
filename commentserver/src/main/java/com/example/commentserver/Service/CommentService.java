@@ -17,4 +17,6 @@ public interface CommentService {
     CommentDto findById(Long commentId);
     CommentDto update(Long commentId, CommentDto commentDto);
     void delete(Long commentId);
+
+    Long countByUserId(Long userId);
 }
