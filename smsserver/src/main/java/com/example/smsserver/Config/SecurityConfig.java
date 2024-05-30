@@ -18,10 +18,6 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Bean
-    public PasswordEncoder PasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -29,25 +25,11 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfiguration()))  // CORS 설정 추가
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/sms/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
         return httpSecurity.build();
-    }
-    @Bean
-    public CorsConfigurationSource corsConfiguration(){
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://dodovote.netlify.app"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration("/**", configuration);
-
-        return source;
     }
 }
