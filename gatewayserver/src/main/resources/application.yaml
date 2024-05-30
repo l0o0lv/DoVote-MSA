@@ -2,13 +2,13 @@ spring:
   cloud:
     gateway:
       default-filters:
-        - DedupeResponseHeader=Access-Control-Allow-Origin, Access-Control-Allow-Credentials
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
       globalcors:
         cors-configurations:
           '[/**]':
             allowedOrigins:
               - 'http://localhost:3000'
-              - 'https://dodovote.netlify.app/'
+              - 'https://dodovote.netlify.app'
             allow-credentials: true
             allowedHeaders: '*'
             allowedMethods:
