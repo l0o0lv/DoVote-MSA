@@ -1,4 +1,4 @@
-package com.example.smsserver.Config;
+package com.example.messageserver.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,9 +29,9 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfiguration()))  // CORS 설정 추가
+                .cors(cors -> cors.configurationSource(corsConfiguration()))
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/sms/**").permitAll()
+                        .requestMatchers("/message/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
