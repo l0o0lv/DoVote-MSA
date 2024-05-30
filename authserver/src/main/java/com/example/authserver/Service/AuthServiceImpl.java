@@ -68,6 +68,7 @@ public class AuthServiceImpl implements AuthService{
         tokenDto.setNickname(authEntity.getNickname());
         tokenDto.setRoles((authEntity.getRole().toString())); // userdto에서 받아와야 하는데 널값이 떠 entity로 변경
         tokenDto.setToken(jwtTokenProvider.createToken(authEntity.getNickname(),authEntity.getRole()));
+        tokenDto.setKeyId(authEntity.getId());
         logger.info("로그인 성공!");
 
         authEntity.setFirebaseToken(authDto.getFirebaseToken()); //FireBaseToekn 저장
