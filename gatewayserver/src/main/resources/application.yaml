@@ -15,6 +15,7 @@ spring:
               - GET
               - POST
               - DELETE
+              - PATCH
               - OPTIONS
 
   application:
