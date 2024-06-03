@@ -124,7 +124,7 @@ public class VoteServiceImpl implements VoteService {
 
             for (Vote vote : votes) {
                 if (vote.getChoice().equals(choice)) {
-                    Long userId = vote.getId();
+                    Long userId = vote.getUserId();
                     AuthResponseDto user = authFeignClient.findById(userId);
 
                     if (user != null) {
