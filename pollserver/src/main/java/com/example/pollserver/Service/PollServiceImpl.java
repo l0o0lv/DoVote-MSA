@@ -139,8 +139,10 @@ public class PollServiceImpl implements PollService{
                 .orElseThrow(() -> new IllegalArgumentException("투표를 찾을 수 없습니다."));
 
         commentFeignClient.deleteComments(id);
+
         voteRepository.deleteByPollId(id);
         choiceRepository.deleteByPollId(id);
+        likeRepository.deleteByPollId(id);
         pollRepository.delete(poll);
     }
 
