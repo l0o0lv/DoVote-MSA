@@ -3,10 +3,12 @@ package com.example.pollserver.Service;
 import com.example.pollserver.Dto.Feign.AuthResponseDto;
 import com.example.pollserver.Dto.Feign.PollResponseDto;
 import com.example.pollserver.Dto.Poll.*;
+import com.example.pollserver.Entity.Like;
 import com.example.pollserver.Entity.Poll;
 import com.example.pollserver.Entity.Vote;
 import com.example.pollserver.Enum.Category;
 import com.example.pollserver.Enum.VoteStatus;
+import com.example.pollserver.Repository.LikeRepository;
 import com.example.pollserver.Repository.PollRepository;
 import com.example.pollserver.Repository.VoteRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +20,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.nio.file.AccessDeniedException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.example.pollserver.Dto.Poll.LikeDto.*;
 import static com.example.pollserver.Dto.Poll.PollDto.entityToDto;
 
 @Service
@@ -30,14 +34,17 @@ public class PollServiceImpl implements PollService{
     private static final Logger logger = LoggerFactory.getLogger(PollServiceImpl.class);
     private final PollRepository pollRepository;
     private final VoteRepository voteRepository;
+    private final LikeRepository likeRepository;
     private final AuthFeignClient authFeignClient;
 
     @Autowired
     public PollServiceImpl(PollRepository pollRepository,
                            VoteRepository voteRepository,
+                           LikeRepository likeRepository,
                            AuthFeignClient authFeignClient) {
         this.pollRepository = pollRepository;
         this.voteRepository = voteRepository;
+        this.likeRepository = likeRepository;
         this.authFeignClient = authFeignClient;
 
     }
@@ -130,11 +137,18 @@ public class PollServiceImpl implements PollService{
 
 
     // 투표 좋아요 기능
-    public void likePoll(LikeDto likeDto) {
+    public void likePoll(LikeDto likeDto) throws AccessDeniedException {
         //프론트에서 보내준 pollid에 맞는 투표 db에 접근 -> poll에 넣어줌
         Poll poll = pollRepository.findById(likeDto.getPollId())
                 .orElseThrow(() -> new RuntimeException("투표를 찾을 수 없습니다."));
 
+        if (likeRepository.existsByUserIdAndPollId(likeDto.getUserId(),likeDto.getPollId()))
+            throw new AccessDeniedException("이미 좋아요를 눌렀습니다.");
+
+        Like like = dtoToEntity(likeDto);
+        likeRepository.save(like);
+        poll.setLikesCount(poll.getLikesCount()+1);
+        pollRepository.save(poll);
     }
 
     //현재 로그인한 유저의 생성한 투표수 반환

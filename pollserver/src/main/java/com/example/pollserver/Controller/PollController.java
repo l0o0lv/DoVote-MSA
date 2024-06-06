@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -99,7 +100,7 @@ public class PollController {
 
     // 좋아요 기능
     @PostMapping("/likes") //TODO : JWT 필터 필요
-    public ResponseEntity<?> likePoll(@RequestBody LikeDto likeDto) {
+    public ResponseEntity<?> likePoll(@RequestBody LikeDto likeDto) throws AccessDeniedException {
         pollService.likePoll(likeDto);
         return ResponseEntity.ok().build();
     }
