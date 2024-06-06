@@ -13,6 +13,7 @@ import com.example.commentserver.Service.Feign.PollFeignClient;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -351,8 +352,8 @@ public class CommentServicempl implements CommentService{
     }
 
     @Override
+    @Transactional
     public void deleteByPoll(Long pollId) {
-
         commentRepository.deleteByPollId(pollId);
     }
 
