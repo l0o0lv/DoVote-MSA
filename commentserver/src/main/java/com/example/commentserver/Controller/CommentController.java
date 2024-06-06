@@ -111,6 +111,10 @@ public class CommentController {
         commentService.delete(commentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @DeleteMapping("/cascade/{pollId}")
+    public void deleteComments(@PathVariable Long pollId){
+        commentService.deleteByPoll(pollId);
+    }
 
     @GetMapping("/count/{userId}")
     public Long countByUserId(@PathVariable Long userId) {

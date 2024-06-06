@@ -19,4 +19,6 @@ public interface CommentService {
     void delete(Long commentId);
 
     Long countByUserId(Long userId);
+
+    void deleteByPoll(Long pollId);
 }

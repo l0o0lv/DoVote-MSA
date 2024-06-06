@@ -106,9 +106,8 @@ public class PollController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePoll(@PathVariable Long id) {
+    public void deletePoll(@PathVariable Long id) {
         pollService.deletePoll(id);
-        return ResponseEntity.noContent().build();
     }
 
     //투표 생성 수 반환

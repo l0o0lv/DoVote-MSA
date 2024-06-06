@@ -36,16 +36,20 @@ public class PollServiceImpl implements PollService{
     private final VoteRepository voteRepository;
     private final LikeRepository likeRepository;
     private final AuthFeignClient authFeignClient;
+    private final CommentFeignClient commentFeignClient;
 
     @Autowired
     public PollServiceImpl(PollRepository pollRepository,
                            VoteRepository voteRepository,
                            LikeRepository likeRepository,
-                           AuthFeignClient authFeignClient) {
+                           AuthFeignClient authFeignClient,
+                           CommentFeignClient commentFeignClient) {
         this.pollRepository = pollRepository;
         this.voteRepository = voteRepository;
         this.likeRepository = likeRepository;
         this.authFeignClient = authFeignClient;
+        this.commentFeignClient = commentFeignClient;
+
 
     }
 
@@ -130,8 +134,7 @@ public class PollServiceImpl implements PollService{
         Poll poll = pollRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("투표를 찾을 수 없습니다."));
 
-        //TODO : 해당 투표에 달린 댓글 삭제
-
+        commentFeignClient.deleteComments(id);
         pollRepository.delete(poll);
     }
 
