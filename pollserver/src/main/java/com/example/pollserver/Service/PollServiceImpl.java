@@ -2,10 +2,7 @@ package com.example.pollserver.Service;
 
 import com.example.pollserver.Dto.Feign.AuthResponseDto;
 import com.example.pollserver.Dto.Feign.PollResponseDto;
-import com.example.pollserver.Dto.Poll.ClosePollRequest;
-import com.example.pollserver.Dto.Poll.PollDto;
-import com.example.pollserver.Dto.Poll.PollRequest;
-import com.example.pollserver.Dto.Poll.PollResponse;
+import com.example.pollserver.Dto.Poll.*;
 import com.example.pollserver.Entity.Poll;
 import com.example.pollserver.Entity.Vote;
 import com.example.pollserver.Enum.Category;
@@ -133,38 +130,12 @@ public class PollServiceImpl implements PollService{
 
 
     // 투표 좋아요 기능
-    //UserEntity 객체를 통해 likedPolls를 탐색하다가
-    // Poll 객체를 만나면 다시 likedUsers를 통해 UserEntity 객체를 만나는 순환 참조가 발생할 수 있음.
-//    public void likePoll(LikeDto likeDto) {
-//        //프론트에서 보내준 pollid에 맞는 투표 db에 접근 -> poll에 넣어줌
-//        Poll poll = pollRepository.findById(likeDto.getPollId())
-//                .orElseThrow(() -> new RuntimeException("투표를 찾을 수 없습니다."));
-//
-//        //pollid에 맞는 투표 db에서 LikedUsers 즉 좋아요 누른사람들을
-//        //Set<UserEntity> 형태로 likedUsers에 담음
-//        Set<UserEntity> likedUsers = poll.getLikedUsers();
-//
-//        if (!userDetails.getUsername().equals(likeDto.getNickname())) {
-//            throw new IllegalArgumentException("인증된 사용자가 아닙니다.");
-//        }
-//
-//        UserEntity user = userRepository.findByNickname(userDetails.getUsername());
-//
-//        if (likedUsers.contains(user)) {
-//            // 이미 좋아요를 누른 상태이므로 좋아요 취소
-//            likedUsers.remove(user);
-//            user.getLikedPolls().remove(poll);
-//            poll.setLikesCount(poll.getLikesCount() - 1); // 좋아요 수 감소
-//        } else {
-//            // 좋아요 누름
-//            likedUsers.add(user);
-//            user.getLikedPolls().add(poll);
-//            poll.setLikesCount(poll.getLikesCount() + 1); // 좋아요 수 증가
-//        }
-//
-//        pollRepository.save(poll);
-//        userRepository.save(user);
-//    }
+    public void likePoll(LikeDto likeDto) {
+        //프론트에서 보내준 pollid에 맞는 투표 db에 접근 -> poll에 넣어줌
+        Poll poll = pollRepository.findById(likeDto.getPollId())
+                .orElseThrow(() -> new RuntimeException("투표를 찾을 수 없습니다."));
+
+    }
 
     //현재 로그인한 유저의 생성한 투표수 반환
     public long getCreatedPollCount(String nickname) {

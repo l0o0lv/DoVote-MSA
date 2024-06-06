@@ -1,10 +1,7 @@
 package com.example.pollserver.Service;
 
 import com.example.pollserver.Dto.Feign.PollResponseDto;
-import com.example.pollserver.Dto.Poll.ClosePollRequest;
-import com.example.pollserver.Dto.Poll.PollDto;
-import com.example.pollserver.Dto.Poll.PollRequest;
-import com.example.pollserver.Dto.Poll.PollResponse;
+import com.example.pollserver.Dto.Poll.*;
 import com.example.pollserver.Enum.Category;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +24,7 @@ public interface PollService {
     // 카테고리별로 투표 조회하기
     List<PollResponse> getPollsByCategory(Category category);
     //투표 좋아요 기능
-//    void likePoll(LikeDto likeDto);
+    void likePoll(LikeDto likeDto);
     //현재 로그인한 유저의 투표 생성 수 반환
     long getCreatedPollCount(String nickname);
     //현재 로그인한 유저의 투표 참여 수 반환

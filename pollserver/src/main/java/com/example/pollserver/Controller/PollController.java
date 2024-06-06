@@ -1,10 +1,7 @@
 package com.example.pollserver.Controller;
 
 import com.example.pollserver.Dto.Feign.PollResponseDto;
-import com.example.pollserver.Dto.Poll.ClosePollRequest;
-import com.example.pollserver.Dto.Poll.PollDto;
-import com.example.pollserver.Dto.Poll.PollRequest;
-import com.example.pollserver.Dto.Poll.PollResponse;
+import com.example.pollserver.Dto.Poll.*;
 import com.example.pollserver.Enum.Category;
 import com.example.pollserver.Service.PollService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +28,6 @@ import org.springframework.http.MediaType;
 @RestController
 @RequestMapping("/polls")
 public class PollController {
-
 
     private static final Logger logger = LoggerFactory.getLogger(PollController.class);
 
@@ -101,12 +97,12 @@ public class PollController {
         return ResponseEntity.ok(pollResponses);
     }
 
-    //좋아요 기능 구현
-//    @PostMapping("/likes") //TODO : JWT 필터 필요
-//    public ResponseEntity<?> likePoll(@RequestBody LikeDto likeDto) {
-//        pollService.likePoll(likeDto);
-//        return ResponseEntity.ok().build();
-//    }
+    // 좋아요 기능
+    @PostMapping("/likes") //TODO : JWT 필터 필요
+    public ResponseEntity<?> likePoll(@RequestBody LikeDto likeDto) {
+        pollService.likePoll(likeDto);
+        return ResponseEntity.ok().build();
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePoll(@PathVariable Long id) {
