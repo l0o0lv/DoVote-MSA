@@ -1,6 +1,6 @@
 package com.example.pollserver.Dto.Poll;
 
-import com.example.pollserver.Entity.Like;
+import com.example.pollserver.Entity.PollLike;
 import com.example.pollserver.Entity.Poll;
 import lombok.*;
 
@@ -13,10 +13,10 @@ public class LikeDto {
     private Long userId;
     private Long pollId;
 
-    public static Like dtoToEntity(LikeDto likeDto) {
+    public static PollLike dtoToEntity(LikeDto likeDto) {
         Poll poll = Poll.builder().id(likeDto.getPollId()).build();
 
-        return Like.builder()
+        return PollLike.builder()
                 .userId(likeDto.getUserId())
                 .poll(poll)
                 .build();

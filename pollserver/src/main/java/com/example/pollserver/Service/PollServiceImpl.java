@@ -3,7 +3,7 @@ package com.example.pollserver.Service;
 import com.example.pollserver.Dto.Feign.AuthResponseDto;
 import com.example.pollserver.Dto.Feign.PollResponseDto;
 import com.example.pollserver.Dto.Poll.*;
-import com.example.pollserver.Entity.Like;
+import com.example.pollserver.Entity.PollLike;
 import com.example.pollserver.Entity.Poll;
 import com.example.pollserver.Entity.Vote;
 import com.example.pollserver.Enum.Category;
@@ -148,8 +148,8 @@ public class PollServiceImpl implements PollService{
         if (likeRepository.existsByUserIdAndPollId(likeDto.getUserId(),likeDto.getPollId()))
             throw new AccessDeniedException("이미 좋아요를 눌렀습니다.");
 
-        Like like = dtoToEntity(likeDto);
-        likeRepository.save(like);
+        PollLike pollLike = dtoToEntity(likeDto);
+        likeRepository.save(pollLike);
         poll.setLikesCount(poll.getLikesCount()+1);
         pollRepository.save(poll);
     }
