@@ -8,6 +8,7 @@ import com.example.pollserver.Entity.Poll;
 import com.example.pollserver.Entity.Vote;
 import com.example.pollserver.Enum.Category;
 import com.example.pollserver.Enum.VoteStatus;
+import com.example.pollserver.Repository.ChoiceRepository;
 import com.example.pollserver.Repository.LikeRepository;
 import com.example.pollserver.Repository.PollRepository;
 import com.example.pollserver.Repository.VoteRepository;
@@ -34,6 +35,7 @@ public class PollServiceImpl implements PollService{
     private static final Logger logger = LoggerFactory.getLogger(PollServiceImpl.class);
     private final PollRepository pollRepository;
     private final VoteRepository voteRepository;
+    private final ChoiceRepository choiceRepository;
     private final LikeRepository likeRepository;
     private final AuthFeignClient authFeignClient;
     private final CommentFeignClient commentFeignClient;
@@ -41,10 +43,12 @@ public class PollServiceImpl implements PollService{
     @Autowired
     public PollServiceImpl(PollRepository pollRepository,
                            VoteRepository voteRepository,
+                           ChoiceRepository choiceRepository,
                            LikeRepository likeRepository,
                            AuthFeignClient authFeignClient,
                            CommentFeignClient commentFeignClient) {
         this.pollRepository = pollRepository;
+        this.choiceRepository = choiceRepository;
         this.voteRepository = voteRepository;
         this.likeRepository = likeRepository;
         this.authFeignClient = authFeignClient;
@@ -135,6 +139,8 @@ public class PollServiceImpl implements PollService{
                 .orElseThrow(() -> new IllegalArgumentException("투표를 찾을 수 없습니다."));
 
         commentFeignClient.deleteComments(id);
+        voteRepository.deleteByPollId(id);
+        choiceRepository.deleteByPollId(id);
         pollRepository.delete(poll);
     }
 

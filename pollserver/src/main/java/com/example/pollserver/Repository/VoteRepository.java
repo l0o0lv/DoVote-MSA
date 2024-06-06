@@ -37,5 +37,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     );
 
     List<Vote> findAllByNickname(String nickname);
+
+    void deleteByPollId(Long id);
 }
 
