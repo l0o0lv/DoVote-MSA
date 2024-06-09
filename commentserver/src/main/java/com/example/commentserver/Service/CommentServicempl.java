@@ -218,10 +218,11 @@ public class CommentServicempl implements CommentService{
 
         if (report.isPresent()) {
             report.get().setReason(reportReason);
-            reportRepository.save(report.get());
-        } else {
             comment.setReportCount(comment.getReportCount() + 1);
-            if (comment.getReportCount() >= 3) {
+            reportRepository.save(report.get());
+        } else
+            comment.setReportCount(comment.getReportCount() + 1);
+        if (comment.getReportCount() >= 3) {
                 comment.setContent("해당 댓글은 신고되어 삭제되었습니다");
                 comment.setMediaUrl(null);
             }
@@ -233,7 +234,7 @@ public class CommentServicempl implements CommentService{
             newReport.setComment(comment);
             newReport.setReason(reportReason);
             reportRepository.save(newReport);
-        }
+
         log.info("댓글이 성공적으로 신고되었습니다!");
         return CommentDto.entityToDto(comment,authResponseDto);
     }
