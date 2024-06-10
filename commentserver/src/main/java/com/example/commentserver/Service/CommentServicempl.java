@@ -192,14 +192,17 @@ public class CommentServicempl implements CommentService{
         }
 
         ReportReason reportReason = ReportReason.valueOf(reportReasonString);
-        Optional<Report> report = reportRepository.findByUserIdAndCommentId(authResponseDto.getId(), comment.getId());
+        List<Report> reports = reportRepository.findByUserIdAndCommentId(authResponseDto.getId(), comment.getId());
 
-        if (report.isPresent()) {
-            report.get().setReason(reportReason);
-            comment.setReportCount(comment.getReportCount() + 1);
-            reportRepository.save(report.get());
-        } else
-            comment.setReportCount(comment.getReportCount() + 1);
+        if (reports.isEmpty()) {
+            Report newReport = new Report();
+            newReport.setUserId(authResponseDto.getId());
+            newReport.setComment(comment);
+            newReport.setReason(reportReason);
+            reportRepository.save(newReport);
+        }
+
+        comment.setReportCount(comment.getReportCount() + 1);
 
         if (comment.getReportCount() >= 3) {
             delete(commentId);

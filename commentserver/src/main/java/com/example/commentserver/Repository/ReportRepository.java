@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
-    Optional<Report> findByUserIdAndCommentId(Long userId, Long commentId);
+    List<Report> findByUserIdAndCommentId(Long userId, Long commentId);
     List<Report> findByCommentId(Long commentId);
 
     void deleteByCommentId(Long id);
