@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @ToString
@@ -23,7 +24,7 @@ public class PollResponse {
     private Long id;
     private Long userId;
     private String createdBy;
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     @NotBlank
     private String title;
@@ -42,12 +43,12 @@ public class PollResponse {
 
 
     public static PollResponse toDto(Poll poll, AuthResponseDto authResponseDto) {
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         return new PollResponse(
                 poll.getId(),
                 poll.getUserId(),
                 authResponseDto.getNickname(),
-                poll.getCreatedAt(),
+                (poll.getCreatedAt().format(formatter)),
                 poll.getTitle(),
                 poll.getQuestion(),
                 poll.getCategory(),

@@ -2,6 +2,7 @@ package com.example.pollserver.Entity;
 
 import com.example.pollserver.Enum.Category;
 import com.example.pollserver.Enum.VoteStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +29,7 @@ public class Poll {
     private Long userId;
     private String createdBy;
     @Column(name = "created_at")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt; // LocalDateTime으로 변경
     private String title;
     private String question;

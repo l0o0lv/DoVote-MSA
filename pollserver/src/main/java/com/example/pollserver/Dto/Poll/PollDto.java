@@ -12,6 +12,7 @@ import lombok.*;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @ToString
@@ -25,7 +26,7 @@ public class PollDto {
     private Long pollId;
     private Long userId;
     private String createdBy;
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     @NotBlank(message = "제목을 입력해 주세요")
     @Size(max = 30)
@@ -48,11 +49,12 @@ public class PollDto {
     private String mediaUrl;
 
     public static PollDto entityToDto(Poll poll, AuthResponseDto authResponseDto) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         return PollDto.builder()
                 .pollId(poll.getId())
                 .userId(poll.getUserId())
                 .createdBy(authResponseDto.getNickname())
-                .createdAt(poll.getCreatedAt())
+                .createdAt(poll.getCreatedAt().format(formatter))
                 .title(poll.getTitle())
                 .question(poll.getQuestion())
                 .choice(poll.getChoices())
