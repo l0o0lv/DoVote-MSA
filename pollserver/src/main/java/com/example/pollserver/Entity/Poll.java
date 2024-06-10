@@ -10,7 +10,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class Poll {
     private Long userId;
     private String createdBy;
     @Column(name = "created_at")
-    private String createdAt; //댓글 달때 달린 현재 시간 기능
+    private LocalDateTime createdAt; // LocalDateTime으로 변경
     private String title;
     private String question;
 
@@ -59,10 +59,11 @@ public class Poll {
     @Column(name = "media_url")
     private String mediaUrl; //미디어 데이터 저장 시 미디어 url을 이 컬럼에 저장
 
-    @PrePersist //자동으로 날짜 및 시간을 설정하는 어노테이션
-    protected void Createtime() {
-        createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss")); //현재시간을 저장
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
+
 
 
 }
