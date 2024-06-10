@@ -53,7 +53,7 @@ public class CommentController {
     @PostMapping("/like/{uid}/{pollId}/{commentId}")
     public ResponseEntity<?> likeOrUnlikeComment(@PathVariable String uid, @PathVariable Long pollId, @PathVariable Long commentId) throws AccessDeniedException {
         LikeDto likeDto = LikeDto.builder().uid(uid).commentId(commentId).build();
-        commentService.likeComment(likeDto);
+        commentService./likeComment(likeDto);
         return ResponseEntity.ok().build();
     }
 
