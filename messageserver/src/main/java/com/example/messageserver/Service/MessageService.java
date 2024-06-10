@@ -9,11 +9,11 @@ import java.util.List;
 public interface MessageService {
     MessageDto SendMessage(MessageDto messageDto);
 
-    List<MessageDto> ReadAllMessage(String nickname);
-
     MessageDto ReadMessage(Long messageId);
 
-    String CountMessage(String nickname);
+    List<MessageDto> ReadAllMessage(Long userId);
+
+    String CountMessage(Long userId);
 
     void DeleteMessage(Long messageId);
 }

@@ -299,6 +299,7 @@ public class CommentServicempl implements CommentService{
         }
     }
 
+
     @Override
     public Long countByUserId(Long userId) {
         return commentRepository.countByUserId(userId);
@@ -315,16 +316,20 @@ public class CommentServicempl implements CommentService{
         commentRepository.deleteByPollId(pollId);
     }
 
-    //대댓글 삭제 메서드
+    // 대댓글 삭제 메서드
     private void deleteChildrenComments(Comment comment) {
         Queue<Comment> queue = new LinkedList<>();
         queue.offer(comment);
-        //재귀 호출로 인한 성능 이슈를 해결하기 위해 반복문을 사용하여 대댓글을 삭제하는 알고리즘
+
+        // 재귀 호출로 인한 성능 이슈를 해결하기 위해 반복문을 사용하여 대댓글을 삭제하는 알고리즘
         while (!queue.isEmpty()) {
             Comment current = queue.poll();
             List<Comment> childrenComments = current.getChildrenComment();
 
             for (Comment childComment : childrenComments) {
+                // 대댓글과 관련된 좋아요 데이터 삭제
+                likeRepository.deleteByCommentId(childComment.getId());
+
                 // 대댓글과 관련된 신고 데이터 삭제
                 List<Report> reportList = reportRepository.findByCommentId(childComment.getId());
                 reportRepository.deleteAll(reportList);
@@ -333,8 +338,12 @@ public class CommentServicempl implements CommentService{
                 queue.offer(childComment);
             }
 
+            // 현재 댓글과 관련된 좋아요 데이터 삭제
+            likeRepository.deleteByCommentId(current.getId());
+
             // 현재 댓글 삭제
             commentRepository.delete(current);
         }
     }
+
 }

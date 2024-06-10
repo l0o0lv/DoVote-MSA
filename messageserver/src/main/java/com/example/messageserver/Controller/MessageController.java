@@ -24,9 +24,9 @@ public class MessageController {
         return ResponseEntity.status(HttpStatus.CREATED).body(send);
     }
 
-    @GetMapping("/read/all/{nickname}") // nickname의 모든 쪽지 조회
-    public ResponseEntity<List<MessageDto>> ReadAllMessage(@PathVariable String nickname){
-        List<MessageDto> messageList = messageService.ReadAllMessage(nickname);
+    @GetMapping("/read/all/{userId}") // nickname의 모든 쪽지 조회
+    public ResponseEntity<List<MessageDto>> ReadAllMessage(@PathVariable Long userId){
+        List<MessageDto> messageList = messageService.ReadAllMessage(userId);
         return ResponseEntity.status(HttpStatus.OK).body(messageList);
     }
 
@@ -35,9 +35,9 @@ public class MessageController {
         MessageDto readMessage = messageService.ReadMessage(messageId);
         return ResponseEntity.status(HttpStatus.OK).body(readMessage);
     }
-    @GetMapping("count/{nickname}") //nickname의 읽지 않은 쪽지의 개수
-    public ResponseEntity<String> CountMessage(@PathVariable String nickname){
-        String count = messageService.CountMessage(nickname);
+    @GetMapping("count/{userId}") //nickname의 읽지 않은 쪽지의 개수
+    public ResponseEntity<String> CountMessage(@PathVariable Long userId){
+        String count = messageService.CountMessage(userId);
         return ResponseEntity.status(HttpStatus.OK).body(count);
     }
     @DeleteMapping("/delete/{messageId}") // 쪽지 삭제 추가

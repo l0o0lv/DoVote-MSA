@@ -40,12 +40,9 @@ public class MessageServiceImpl implements MessageService{
     }
 
     @Override
-    public List<MessageDto> ReadAllMessage(String nickname){
+    public List<MessageDto> ReadAllMessage(Long userId){
         log.info("(MessageService) ReadAllMessage 실행.");
-
-        AuthResponseDto receiverId = authFeignClient.findByNickname(nickname);
-        log.info(String.valueOf(receiverId));
-        return messageRepository.findAllByReceiverIdOrderBySendTimeDesc(receiverId.getId())
+        return messageRepository.findAllByReceiverIdOrderBySendTimeDesc(userId)
                 .stream()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
@@ -63,9 +60,8 @@ public class MessageServiceImpl implements MessageService{
     }
 
     @Override
-    public String CountMessage(String nickname){
-        AuthResponseDto receiverId = authFeignClient.findByNickname(nickname);
-        return messageRepository.countByReceiverIdAndReadStatus(receiverId.getId(), false).toString();
+    public String CountMessage(Long userId){
+        return messageRepository.countByReceiverIdAndReadStatus(userId, false).toString();
     }
     public void DeleteMessage(Long messageId){
         messageRepository.deleteById(messageId);
