@@ -200,10 +200,11 @@ public class CommentServicempl implements CommentService{
             reportRepository.save(report.get());
         } else
             comment.setReportCount(comment.getReportCount() + 1);
+
         if (comment.getReportCount() >= 3) {
-                comment.setContent("해당 댓글은 신고되어 삭제되었습니다");
-                comment.setMediaUrl(null);
-            }
+            delete(commentId);
+            log.info("누적 신고 3회로 댓글 삭제되었습니다.");
+            } else {
             comment.setReportReason(reportReason);
             commentRepository.save(comment);
 
@@ -213,7 +214,8 @@ public class CommentServicempl implements CommentService{
             newReport.setReason(reportReason);
             reportRepository.save(newReport);
 
-        log.info("댓글이 성공적으로 신고되었습니다!");
+            log.info("댓글이 성공적으로 신고되었습니다!");
+        }
         return CommentDto.entityToDto(comment,authResponseDto);
     }
 
