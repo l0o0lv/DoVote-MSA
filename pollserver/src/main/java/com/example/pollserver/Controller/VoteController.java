@@ -34,9 +34,9 @@ public class VoteController {
     }
 
     //투표 완료한사람 정보 리턴
-    @GetMapping("/ok/{nickname}") //TODO : JWT 필터 필요
-    public ResponseEntity<List<VoteDto>> getVotesByNickname(@PathVariable("nickname") String nickname) {
-        List<VoteDto> votes = voteService.getVotesByNickname(nickname);
+    @GetMapping("/ok/{userId}") //TODO : JWT 필터 필요
+    public ResponseEntity<List<VoteDto>> getVotesByNickname(@PathVariable("userId") Long userId) {
+        List<VoteDto> votes = voteService.getVotesByNickname(userId);
         return ResponseEntity.ok(votes);
     }
 

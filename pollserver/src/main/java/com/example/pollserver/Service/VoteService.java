@@ -14,7 +14,7 @@ public interface VoteService {
 
 
     //닉네임으로 투표 결과 보내주기
-    List<VoteDto> getVotesByNickname(String nickname);
+    List<VoteDto> getVotesByNickname(Long userId);
 
 
     //현재 투표에 선택 항목들의 선택된 수 리턴

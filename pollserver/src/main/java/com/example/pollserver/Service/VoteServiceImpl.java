@@ -74,11 +74,11 @@ public class VoteServiceImpl implements VoteService {
     }
 
     //유저 닉네임으로 투표 결과 프론트한테 반환 해주기
-    public List<VoteDto> getVotesByNickname(String nickname) {
+    public List<VoteDto> getVotesByNickname(Long userId) {
 
-        AuthResponseDto authResponseDto = authFeignClient.findByNickname(nickname);
+        AuthResponseDto authResponseDto = authFeignClient.findById(userId);
 
-        List<Vote> votes = voteRepository.findByNickname(nickname);
+        List<Vote> votes = voteRepository.findByUserId(userId);
         return votes.stream()
                 .map(vote -> new VoteDto(vote, authResponseDto))
                 .collect(Collectors.toList());
