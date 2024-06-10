@@ -1,12 +1,14 @@
 package com.example.commentserver.Entity;
 
 import com.example.commentserver.Enum.ReportReason;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class Comment {
     private int reportCount = 0;
 
     @CreationTimestamp
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime time;
 
     @ManyToOne
@@ -43,4 +46,10 @@ public class Comment {
     @Column(name = "report_reason")
     @Enumerated(EnumType.STRING)
     private ReportReason reportReason;
+
+    @PrePersist
+    protected void onCreate() {
+        time = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    }
+
 }
