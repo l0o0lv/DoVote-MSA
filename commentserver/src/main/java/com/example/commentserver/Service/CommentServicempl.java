@@ -279,6 +279,7 @@ public class CommentServicempl implements CommentService{
     }
 
     //댓글 삭제
+    @Transactional
     @Override
     public void delete(Long commentId) {
         try {
