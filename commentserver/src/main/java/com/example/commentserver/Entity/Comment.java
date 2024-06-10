@@ -30,7 +30,6 @@ public class Comment {
     private int likes = 0;
     private int reportCount = 0;
 
-    @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime time;
 

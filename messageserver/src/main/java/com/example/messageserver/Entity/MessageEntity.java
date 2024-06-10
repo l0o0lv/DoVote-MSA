@@ -24,7 +24,6 @@ public class MessageEntity {
     private Long receiverId;
     private String content; // 내용
 
-    @CreationTimestamp // 현재 시간 자동 삽입
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime sendTime; // 송신 시간
     @ColumnDefault("FALSE")
