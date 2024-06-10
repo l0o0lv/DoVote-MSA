@@ -2,11 +2,14 @@ package com.example.commentserver.Service;
 
 import com.example.commentserver.Dto.AuthResponseDto;
 import com.example.commentserver.Dto.CommentDto;
+import com.example.commentserver.Dto.LikeDto;
 import com.example.commentserver.Dto.PollResponseDto;
 import com.example.commentserver.Entity.Comment;
+import com.example.commentserver.Entity.CommentLike;
 import com.example.commentserver.Entity.Report;
 import com.example.commentserver.Enum.ReportReason;
 import com.example.commentserver.Repository.CommentRepository;
+import com.example.commentserver.Repository.LikeRepository;
 import com.example.commentserver.Repository.ReportRepository;
 import com.example.commentserver.Service.Feign.AuthFeignClient;
 import com.example.commentserver.Service.Feign.PollFeignClient;
@@ -20,8 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.example.commentserver.Dto.LikeDto.dtoToEntity;
 
 @Slf4j
 @Service
@@ -31,17 +37,20 @@ public class CommentServicempl implements CommentService{
     private final ReportRepository reportRepository;
     private final AuthFeignClient authFeignClient;
     private final PollFeignClient pollFeignClient;
+    private final LikeRepository likeRepository;
     private final Storage storage;
 
     public CommentServicempl(@Autowired CommentRepository commentRepository,
                              ReportRepository reportRepository,
                              AuthFeignClient authFeignClient,
                              PollFeignClient pollFeignClient,
+                             LikeRepository likeRepository,
                              Storage storage) {
         this.commentRepository = commentRepository;
         this.reportRepository = reportRepository;
         this.storage = storage;
         this.authFeignClient = authFeignClient;
+        this.likeRepository = likeRepository;
         this.pollFeignClient = pollFeignClient;
     }
 
@@ -161,37 +170,6 @@ public class CommentServicempl implements CommentService{
         return CommentDto.entityToDto(savedComment,authResponseDto);
     }
 
-    //댓글 좋아요
-//    @Transactional
-//    @Override
-//    public CommentDto likeOrUnlikeComment(String uid, Long pollId, Long commentId) {
-//        UserEntity user = userRepository.findByUid(uid);
-//        if (user == null) {
-//            throw new IllegalArgumentException("UID가 " + uid + "인 유저가 존재하지 않습니다.");
-//        }
-//
-//        Comment comment = commentRepository.findById(commentId)
-//                .orElseThrow(() -> new IllegalArgumentException("댓글 번호가 " + commentId + "번인 댓글이 존재하지 않습니다."));
-//
-//        if (!comment.getPoll().getId().equals(pollId)) {
-//            throw new IllegalArgumentException("해당 투표의 댓글이 아닙니다. 투표 아이디나 댓글 아이디를 다시 설정해 주세요.");
-//        }
-//
-//        if (comment.getLikedUsers().contains(user)) {
-//            comment.getLikedUsers().remove(user);
-//            user.getLikedComments().remove(comment);
-//            comment.setLikes(comment.getLikes() - 1);
-//        } else {
-//            comment.getLikedUsers().add(user);
-//            user.getLikedComments().add(comment);
-//            comment.setLikes(comment.getLikes() + 1);
-//        }
-//
-//        userRepository.save(user);
-//        Comment savedComment = commentRepository.save(comment);
-//        log.info("해당 댓글 좋아요 상태가 변경되었습니다!");
-//        return CommentDto.entityToDto(savedComment);
-//    }
 
     //댓글 신고
     @Override
@@ -239,44 +217,19 @@ public class CommentServicempl implements CommentService{
         return CommentDto.entityToDto(comment,authResponseDto);
     }
 
-//    //해당 댓글 쪽지 전송
-//    public void sendMessageFromComment(String uid, Long pollId, Long commentId, MessageDto messageDto) {
-//        Comment comment = commentRepository.findById(commentId)
-//                .orElseThrow(() -> new IllegalArgumentException("댓글 번호가 " + commentId + "번인 댓글이 존재하지 않습니다."));
-//
-//        AuthResponseDto authResponseDto = authFeignClient.findByUid(uid);
-//        if (authResponseDto == null) {
-//            throw new IllegalArgumentException(uid + "가 존재하지 않습니다.");
-//        }
-//
-//        UserEntity receiver = comment.getUser();
-//
-//        if (sender.getId().equals(receiver.getId())) {
-//            throw new IllegalArgumentException("본인에게는 쪽지를 보낼 수 없습니다.");
-//        }
-//
-//        MessageEntity messageEntity = new MessageEntity();
-//        messageEntity.setComment(comment);
-//        messageEntity.setSender(sender);
-//        messageEntity.setReceiver(receiver);
-//        messageEntity.setContent(messageDto.getContent());
-//
-//        messageRepository.save(messageEntity);
-//        log.info("쪽지가 성공적으로 보내졌습니다!");
-//    }
+    @Override
+    public void likeComment(LikeDto likeDto) throws AccessDeniedException {
+        Comment comment = commentRepository.findById(likeDto.getCommentId())
+                .orElseThrow(() -> new RuntimeException("투표를 찾을 수 없습니다."));
 
-    //댓글 쪽지 조회
-//    @Override
-//    public List<MessageDto> getMessagesFromComment(Long commentId) {
-//        Comment comment = commentRepository.findById(commentId).orElse(null);
-//        if (comment == null) {
-//            throw new RuntimeException("댓글 정보가 확인되지 않습니다.");
-//        }
-//        List<MessageEntity> messages = comment.getMessages();
-//        return messages.stream()
-//                .map(MessageDto::entityToDto)
-//                .collect(Collectors.toList());
-//    }
+        if(likeRepository.existsByUidAndCommentId(likeDto.getUid(),likeDto.getCommentId()))
+            throw new AccessDeniedException("이미 좋아요를 눌렀습니다.");
+
+        CommentLike commentLike = dtoToEntity(likeDto);
+        likeRepository.save(commentLike);
+        comment.setLikes(comment.getLikes() + 1);
+        commentRepository.save(comment);
+    }
 
     //해당 투표 전체 댓글 조회
     @Override
@@ -334,6 +287,7 @@ public class CommentServicempl implements CommentService{
             Comment comment = commentRepository.findById(commentId)
                     .orElseThrow(() -> new IllegalArgumentException("댓글 아이디가 " + commentId + "번인 댓글이 존재하지 않습니다."));
             // 댓글과 관련된 신고 데이터 삭제
+            likeRepository.deleteById(commentId);
             List<Report> reportList = reportRepository.findByCommentId(commentId);
             reportRepository.deleteAll(reportList);
 

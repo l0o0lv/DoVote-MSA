@@ -1,6 +1,7 @@
 package com.example.commentserver.Controller;
 
 import com.example.commentserver.Dto.CommentDto;
+import com.example.commentserver.Dto.LikeDto;
 import com.example.commentserver.Service.CommentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Slf4j
@@ -47,12 +49,13 @@ public class CommentController {
         return new ResponseEntity<>(savedComment, HttpStatus.CREATED);
     }
 
-//    //댓글 좋아요
-//    @PostMapping("/like/{uid}/{pollId}/{commentId}")
-//    public ResponseEntity<CommentDto> likeOrUnlikeComment(@PathVariable String uid, @PathVariable Long pollId, @PathVariable Long commentId) {
-//        CommentDto updatedComment = commentService.likeOrUnlikeComment(uid, pollId, commentId);
-//        return new ResponseEntity<>(updatedComment, HttpStatus.OK);
-//    }
+    //댓글 좋아요
+    @PostMapping("/like/{uid}/{pollId}/{commentId}")
+    public ResponseEntity<?> likeOrUnlikeComment(@PathVariable String uid, @PathVariable Long pollId, @PathVariable Long commentId) throws AccessDeniedException {
+        LikeDto likeDto = LikeDto.builder().uid(uid).commentId(commentId).build();
+        commentService.likeComment(likeDto);
+        return ResponseEntity.ok().build();
+    }
 
     //댓글 신고
     @SneakyThrows
@@ -63,23 +66,6 @@ public class CommentController {
         CommentDto updatedComment = commentService.reportComment(uid, pollId, commentId, commentDto.getReportReason().toString());
         return new ResponseEntity<>(updatedComment, HttpStatus.OK);
     }
-
-//    //해당 댓글 쪽지 전송
-//    @SneakyThrows
-//    @PostMapping("/message/{uid}/{pollId}/{commentId}")
-//    public ResponseEntity<Void> sendMessageFromComment(@PathVariable String uid, @PathVariable Long pollId, @PathVariable Long commentId, @RequestBody String content) {
-//        ObjectMapper mapper = new ObjectMapper();
-//        MessageDto messageDto = mapper.readValue(content, MessageDto.class);
-//        commentService.sendMessageFromComment(uid, pollId, commentId, messageDto);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-//
-//    //댓글 쪽지 조회
-//    @GetMapping("/messages/{commentId}")
-//    public ResponseEntity<List<MessageDto>> getMessagesFromComment(@PathVariable Long commentId) {
-//        List<MessageDto> messages = commentService.getMessagesFromComment(commentId);
-//        return new ResponseEntity<>(messages, HttpStatus.OK);
-//    }
 
     //해당 투표 전체 댓글 조회
     @GetMapping("/poll/{pollId}")
