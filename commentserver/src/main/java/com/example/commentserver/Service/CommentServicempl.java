@@ -309,6 +309,11 @@ public class CommentServicempl implements CommentService{
     @Override
     @Transactional
     public void deleteByPoll(Long pollId) {
+        List<Comment> comments = commentRepository.findByPollId(pollId);
+        for (Comment comment : comments) {
+            reportRepository.deleteByCommentId(comment.getId());
+            likeRepository.deleteByCommentId(comment.getId());
+        }
         commentRepository.deleteByPollId(pollId);
     }
 
