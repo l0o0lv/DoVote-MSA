@@ -210,13 +210,6 @@ public class CommentServicempl implements CommentService{
             } else {
             comment.setReportReason(reportReason);
             commentRepository.save(comment);
-
-            Report newReport = new Report();
-            newReport.setUserId(authResponseDto.getId());
-            newReport.setComment(comment);
-            newReport.setReason(reportReason);
-            reportRepository.save(newReport);
-
             log.info("댓글이 성공적으로 신고되었습니다!");
         }
         return CommentDto.entityToDto(comment,authResponseDto);
@@ -292,7 +285,7 @@ public class CommentServicempl implements CommentService{
             Comment comment = commentRepository.findById(commentId)
                     .orElseThrow(() -> new IllegalArgumentException("댓글 아이디가 " + commentId + "번인 댓글이 존재하지 않습니다."));
             // 댓글과 관련된 신고 데이터 삭제
-            likeRepository.deleteById(commentId);
+            likeRepository.deleteByCommentId(commentId);
             List<Report> reportList = reportRepository.findByCommentId(commentId);
             reportRepository.deleteAll(reportList);
 
