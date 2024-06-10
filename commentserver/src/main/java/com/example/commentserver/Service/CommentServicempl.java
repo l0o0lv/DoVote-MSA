@@ -156,7 +156,6 @@ public class CommentServicempl implements CommentService{
         comment.setParentComment(parentComment);
         comment.setUserId(authResponseDto.getId());
         comment.setPollId(pollResponseDto.getId());
-        parentComment.setUserId(authResponseDto.getId());
         parentComment.setPollId(pollResponseDto.getId());
         comment.setMediaUrl(mediaUrl);
 
