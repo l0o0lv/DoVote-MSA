@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @ToString
@@ -24,7 +25,7 @@ public class PollDto {
     private Long pollId;
     private Long userId;
     private String createdBy;
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @NotBlank(message = "제목을 입력해 주세요")
     @Size(max = 30)

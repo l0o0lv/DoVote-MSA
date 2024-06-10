@@ -10,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @ToString
@@ -22,7 +23,7 @@ public class PollResponse {
     private Long id;
     private Long userId;
     private String createdBy;
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @NotBlank
     private String title;
