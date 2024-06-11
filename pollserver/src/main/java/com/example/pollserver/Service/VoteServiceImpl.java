@@ -106,8 +106,8 @@ public class VoteServiceImpl implements VoteService {
 
 
     //현재 유저와 같은 선택지를 고른 유저의 닉네임 반환
-    public List<String> findUserNicknamesByVoteAndChoice(Long pollId, Long choiceId, String nickname) {
-        return voteRepository.findUserNicknamesByVoteAndChoice(pollId, choiceId, nickname);
+    public List<Long> findUserNicknamesByVoteAndChoice(Long pollId, Long choiceId, Long userId) {
+        return voteRepository.findUserIdsByVoteAndChoice(pollId, choiceId, userId);
     }
 
     //연령별, 성별별 투표 결과 리턴

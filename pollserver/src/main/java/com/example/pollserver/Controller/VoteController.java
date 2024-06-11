@@ -47,13 +47,13 @@ public class VoteController {
     }
 
     //현재 유저와 같은 선택지를 고른 유저의 닉네임 반환
-    @GetMapping("/user-nicknames/{pollId}/{choiceId}/{nickname}")
-    public ResponseEntity<List<String>> getUserNicknamesByVoteAndChoice(
+    @GetMapping("/user-nicknames/{pollId}/{choiceId}/{userId}")
+    public ResponseEntity<List<Long>> getUserNicknamesByVoteAndChoice(
             @PathVariable Long pollId,
             @PathVariable Long choiceId,
-            @PathVariable String nickname) {
+            @PathVariable Long userId) {
 
-        List<String> userNicknames = voteService.findUserNicknamesByVoteAndChoice(pollId, choiceId, nickname);
+        List<Long> userNicknames = voteService.findUserNicknamesByVoteAndChoice(pollId, choiceId, userId);
 
         return new ResponseEntity<>(userNicknames, HttpStatus.OK);
     }

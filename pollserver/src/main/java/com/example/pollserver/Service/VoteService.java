@@ -21,7 +21,7 @@ public interface VoteService {
     List<Map<String, Object>> getSelectedOptionCounts(Long pollId);
 
 
-    List<String> findUserNicknamesByVoteAndChoice(Long pollId, Long choiceId, String nickname);
+    List<Long> findUserNicknamesByVoteAndChoice(Long pollId, Long choiceId, Long userId);
 
 
 //    void updateVoteNickname(UserDto userDto);

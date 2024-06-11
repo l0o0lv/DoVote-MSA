@@ -26,14 +26,14 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
 
     //현재 유저와 같은 선택지를 고른 유저의 닉네임 반환
-    @Query("SELECT v.nickname FROM Vote v " +
+    @Query("SELECT v.userId FROM Vote v " +
             "WHERE v.poll.id = :pollId " +
             "AND v.choice.id = :choiceId " +
-            "AND v.nickname <> :excludeNickname") // 선택지를 고른 다른 사용자들의 닉네임을 가져오기 위해 현재 사용자는 제외
-    List<String> findUserNicknamesByVoteAndChoice(
+            "AND v.userId <> :userId") // 선택지를 고른 다른 사용자들의 닉네임을 가져오기 위해 현재 사용자는 제외
+    List<Long> findUserIdsByVoteAndChoice(
             @Param("pollId") Long pollId,
             @Param("choiceId") Long choiceId,
-            @Param("excludeNickname") String excludeNickname
+            @Param("userId") Long userId
     );
 
     List<Vote> findAllByNickname(String nickname);
